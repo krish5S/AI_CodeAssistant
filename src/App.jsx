@@ -1,6 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { useState } from "react";
 import CodeEditor from "./components/CodeEditor";
 import LanguageSelector from "./components/LanguageSelector";
 import ActionButtons from "./components/ActionButtons";
@@ -12,33 +11,48 @@ function App() {
   const [response, setResponse] = useState(null);
 
   useEffect(() => {
-  axios.get("http://localhost:5000/api/test")
-    .then(res => console.log(res.data))
-    .catch(err => console.error(err));
-}, []);
+    axios
+      .get("/api/test")
+      .then((res) => console.log(res.data))
+      .catch((err) => console.error(err));
+  }, []);
 
   return (
-    <div className="container">
-      <h1>AI Code Assistant</h1>
+    <div className="app-container">
+      <header className="header">
+        <h1>AI Code Assistant</h1>
+        <p className="tagline">
+          Paste your code. Get instant AI-powered insights.
+        </p>
+      </header>
 
-      <LanguageSelector
-        language={language}
-        setLanguage={setLanguage}
-      />
+      <div className="main-layout">
+        {/* Left Panel — Editor */}
+        <div className="glass-card">
+          <div className="panel-title">
+            <span className="icon">✦</span> Code Editor
+          </div>
 
-      <CodeEditor
-        code={code}
-        setCode={setCode}
-        language={language}
-      />
+          <LanguageSelector language={language} setLanguage={setLanguage} />
 
-      <ActionButtons
-        code={code}
-        language={language}
-        setResponse={setResponse}
-      />
+          <CodeEditor code={code} setCode={setCode} language={language} />
 
-      <OutputPanel response={response} />
+          <ActionButtons
+            code={code}
+            language={language}
+            setResponse={setResponse}
+          />
+        </div>
+
+        {/* Right Panel — Output */}
+        <div className="glass-card">
+          <div className="panel-title">
+            <span className="icon">⚡</span> Analysis Output
+          </div>
+
+          <OutputPanel response={response} />
+        </div>
+      </div>
     </div>
   );
 }

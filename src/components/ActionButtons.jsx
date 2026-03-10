@@ -12,7 +12,7 @@ function ActionButtons({ code, language, setResponse }) {
 
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:5000/api/analyze", {
+      const res = await axios.post("/api/analyze", {
         code,
         language,
         action: actionType,
@@ -21,7 +21,8 @@ function ActionButtons({ code, language, setResponse }) {
       setResponse(res.data.result);
     } catch (error) {
       console.error("❌ API Error:", error);
-      const errorMessage = error.response?.data?.details || error.message || "Server Error";
+      const errorMessage =
+        error.response?.data?.details || error.message || "Server Error";
       alert("Analysis Failed: " + errorMessage);
     } finally {
       setLoading(false);
@@ -29,27 +30,43 @@ function ActionButtons({ code, language, setResponse }) {
   };
 
   return (
-    <div style={{ marginTop: "20px", display: "flex", gap: "10px", flexWrap: "wrap" }}>
-      <button onClick={() => callAPI("explain")} disabled={loading}>
-        Explain
+    <div className="button-group">
+      <button
+        className="btn-explain"
+        onClick={() => callAPI("explain")}
+        disabled={loading}
+      >
+        💡 Explain
       </button>
 
-      <button onClick={() => callAPI("bugs")} disabled={loading}>
-        Find Bugs
+      <button
+        className="btn-bugs"
+        onClick={() => callAPI("bugs")}
+        disabled={loading}
+      >
+        🐛 Find Bugs
       </button>
 
-      <button onClick={() => callAPI("optimize")} disabled={loading}>
-        Optimize
+      <button
+        className="btn-optimize"
+        onClick={() => callAPI("optimize")}
+        disabled={loading}
+      >
+        ⚡ Optimize
       </button>
 
-      <button onClick={() => callAPI("complexity")} disabled={loading}>
-        Complexity
+      <button
+        className="btn-complexity"
+        onClick={() => callAPI("complexity")}
+        disabled={loading}
+      >
+        📊 Complexity
       </button>
 
       {loading && (
-        <p style={{ width: "100%", color: "#666", fontStyle: "italic" }}>
-          🚀 AI is thinking... please wait...
-        </p>
+        <div className="loading-indicator">
+          <span>🚀 AI is analyzing your code...</span>
+        </div>
       )}
     </div>
   );

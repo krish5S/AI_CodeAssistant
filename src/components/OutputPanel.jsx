@@ -1,24 +1,24 @@
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from "react-markdown";
 
 function OutputPanel({ response }) {
-  if (!response) return null;
-
   return (
-    <div style={{ 
-      marginTop: "30px", 
-      padding: "20px", 
-      border: "1px solid #ddd", 
-      borderRadius: "8px",
-      backgroundColor: "#f9f9f9",
-      textAlign: "left"
-    }}>
-      <h3 style={{ borderBottom: "2px solid #555", paddingBottom: "10px" }}>
-        AI Analysis Results
-      </h3>
-      <div style={{ lineHeight: "1.6", color: "#333" }}>
-        {/* ReactMarkdown handles all the formatting for you! */}
-        <ReactMarkdown>{response}</ReactMarkdown>
-      </div>
+    <div className="output-panel">
+      {!response ? (
+        <div className="output-empty">
+          <span className="empty-icon">✨</span>
+          <p>
+            Your AI analysis results will appear here. Paste some code and click
+            an action to get started.
+          </p>
+        </div>
+      ) : (
+        <div className="output-content">
+          <h3>✅ Analysis Results</h3>
+          <div className="markdown-body">
+            <ReactMarkdown>{response}</ReactMarkdown>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
