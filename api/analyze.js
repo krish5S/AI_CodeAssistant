@@ -35,7 +35,7 @@ export default async function handler(req, res) {
           content: `${prompts[action] || "Analyze this:"}\n\n${code}`,
         },
       ],
-      model: "llama-3.3-70b-versatile",
+      model: process.env.GROQ_MODEL || "openai/gpt-oss-120b",
     });
 
     const result = chatCompletion.choices[0]?.message?.content || "";

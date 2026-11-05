@@ -44,7 +44,7 @@ app.post("/api/analyze", async (req, res) => {
         { role: "system", content: "You are an expert software engineer." },
         { role: "user", content: `${prompts[action] || "Analyze this:"}\n\n${code}` }
       ],
-      model: "llama-3.3-70b-versatile", // Powerful and free on Groq
+      model: process.env.GROQ_MODEL || "openai/gpt-oss-120b",
     });
 
     const result = chatCompletion.choices[0]?.message?.content || "";
@@ -62,4 +62,19 @@ app.get("/api/test", (req, res) => {
   res.json({ message: "Backend is running and connected!" });
 });
 
-app.listen(5000, () => console.log("🚀 Server spinning on http://localhost:5000"));
+const PORT = process.env.PORT || 5000;
+
+const server = app.listen(PORT, () => console.log(`🚀 Server spinning on http://localhost:${PORT}`));
+
+server.on("error", (err) => {
+  if (err.code === "EADDRINUSE") {
+    console.error(`\n❌ Port ${PORT} is already in use.`);
+    if (Number(PORT) === 5000) {
+      console.error(
+        "💡 Note: On macOS, AirPlay Receiver uses port 5000 by default.\n   Either disable AirPlay Receiver (System Settings > General > AirDrop & AirPlay > uncheck 'AirPlay Receiver'),\n   or run on another port, e.g., PORT=5001 npm start"
+      );
+    }
+  } else {
+    console.error("❌ Server error:", err);
+  }
+});
